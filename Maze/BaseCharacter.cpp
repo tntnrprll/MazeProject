@@ -52,6 +52,7 @@ void ABaseCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABaseCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABaseCharacter::MoveRight);
 
+	PlayerInputComponent->BindAction("Bomb", IE_Pressed, this, &ABaseCharacter::AttempToSpawnBomb);
 
 }
 
@@ -109,7 +110,97 @@ void ABaseCharacter::OnRep_IsFlying()
 	GetCharacterMovement()->SetMovementMode(MOVE_Flying);
 }
 
+bool ABaseCharacter::ServerSpawnBomb_Validate()
+{
+	return true;
+}
 
+void ABaseCharacter::ServerSpawnBomb_Implementation()
+{
+	SpawnBombDirection(2);
+}
+
+void ABaseCharacter::SpawnBomb()
+{
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.Instigator = this;
+	SpawnParameters.Owner = GetController();
+	ABomb* Bomb = GetWorld()->SpawnActor<ABomb>(BombActor, GetActorLocation()+FVector(80.0f,0.0f,0.0f), FRotator(0.0f, 90.0f, 0.0f), SpawnParameters);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Spawn?"));
+}
+
+void ABaseCharacter::SpawnBombDirection(int32 Direction)
+{
+	TArray<AActor*> OverlapActors;
+
+	GetOverlappingActors(OverlapActors);
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Overlap actor number  %d"), OverlapActors.Num()));
+
+	if (OverlapActors.Num() <2)
+	{
+
+		for (AActor* Actor : OverlapActors)
+		{
+			AFloorActor* FloorActor = Cast<AFloorActor>(Actor);
+			if (FloorActor)
+			{
+				FVector Location;
+
+				switch (Direction)
+				{
+				case 1:
+					Location = FloorActor->GetActorLocation() + FVector(-80.0f, 0.0f, 700.0f);
+
+					break;
+				case 2:
+					Location = FloorActor->GetActorLocation() + FVector(-80.0f, 0.0f, -700.0f);
+
+					break;
+				case 3:
+					Location = FloorActor->GetActorLocation() + FVector(-80.0f, 700.0f, 0.0f);
+
+					break;
+				case 4:
+					Location = FloorActor->GetActorLocation() + FVector(-80.0f, -700.0f, 0.0f);
+
+
+					break;
+
+				default:
+					break;
+				}
+
+				FActorSpawnParameters SpawnParameters;
+				SpawnParameters.Instigator = this;
+				SpawnParameters.Owner = GetController();
+				ABomb* Bomb = GetWorld()->SpawnActor<ABomb>(BombActor, Location, FRotator(0.0f, 90.0f, 0.0f), SpawnParameters);
+
+			}
+		}
+	}
+
+
+	
+}
+
+void ABaseCharacter::AttempToSpawnBomb()
+{
+	if (BombActor)
+	{
+		if (Role < ROLE_Authority)
+		{
+			ServerSpawnBomb();
+		}
+		else
+		{
+			SpawnBombDirection(2);
+		}
+	}
+
+	
+
+}
 
 
 

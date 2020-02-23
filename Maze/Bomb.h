@@ -9,6 +9,7 @@
 #include "Paper2D/Classes/PaperSpriteComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Net/UnrealNetwork.h"
+#include "FloorActor.h"
 #include "Bomb.generated.h"
 
 /**
@@ -21,33 +22,38 @@ class MAZE_API ABomb : public APaperSpriteActor
 
 protected:
 	ABomb();
-	//void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void BeginPlay() override;
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	UPROPERTY(VisibleAnywhere)
 		UBoxComponent* Collision;
 
-	/*
-	UPROPERTY(VisibleAnywhere)
-		UPaperSprite* Bomb1;
-	UPROPERTY(VisibleAnywhere)
-		UPaperSprite* Bomb2;
-	UPROPERTY(VisibleAnywhere)
-		UPaperSprite* Bomb3;
-	UPROPERTY(VisibleAnywhere)
-		UPaperSprite* Bomb4;
 
 protected:
-	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_OwnNumber)
-		int32 OwnNumber;
-	UFUNCTION()
-		void OnRep_OwnNumber();
+	UPROPERTY(Replicated)
+		int32 CountdownTime=5;
 
-public:
+	void SetCountdownTime(int32 Number);
+
+	void AdvanceTimer();
+	void CountdownHasFinished();
+
+	FTimerHandle CountdownTimerHandle;
+
+protected:
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AFloorActor> FloorActor;
+
+protected:
 	UFUNCTION(Server, Reliable, WithValidation)
-		void ServerSetOwnNumber(int32 Number);
-	bool ServerSetOwnNumber_Validate(int32 Number);
-	void ServerSetOwnNumber_Implementation(int32 Number);
+		void ServerSpawnFloor(FVector Location);
+	bool ServerSpawnFloor_Validate(FVector Location);
+	void ServerSpawnFloor_Implementation(FVector Location);
 
-	*/
+	void AttempToSpawnFloor(FVector Location);
+	void SpawnFloor(FVector Location);
+
+
 };

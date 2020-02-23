@@ -31,6 +31,29 @@ void AFloorActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AFloorActor, FloorNumber);
+	DOREPLIFETIME(AFloorActor, IsActive);
 
 
+}
+
+bool AFloorActor::ServerSetIsActive_Validate()
+{
+	return true;
+}
+
+void AFloorActor::ServerSetIsActive_Implementation()
+{
+	if (Role == ROLE_Authority)
+	{
+		IsActive = false;
+		OnRep_IsActive();
+	}
+}
+
+void AFloorActor::OnRep_IsActive()
+{
+	if (!IsActive)
+	{
+		Destroy();
+	}
 }

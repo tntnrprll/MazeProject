@@ -17,6 +17,7 @@
 #include "GameFramework/Controller.h"
 #include "Camera/CameraComponent.h"
 #include "FloorActor.h"
+#include "Bomb.h"
 #include "Components/BoxComponent.h"
 #include "BaseCharacter.generated.h"
 
@@ -64,5 +65,19 @@ public:
 	UFUNCTION()
 		void OnRep_IsFlying();
 
+	UFUNCTION(BlueprintCallable)
+		void AttempToSpawnBomb();
+
+	UFUNCTION(Server, Reliable, WithValidation)
+		void ServerSpawnBomb();
+	bool ServerSpawnBomb_Validate();
+	void ServerSpawnBomb_Implementation();
+
+	void SpawnBomb();
+	void SpawnBombDirection(int32 Direction);
+
+protected:
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<ABomb> BombActor;
 
 };

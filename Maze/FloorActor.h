@@ -36,4 +36,16 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 		UBoxComponent* Collision;
 
+protected:
+	UPROPERTY(ReplicatedUsing=OnRep_IsActive)
+		bool IsActive = true;
+	UFUNCTION()
+		void OnRep_IsActive();
+
+public:
+	UFUNCTION(Server, Reliable, WithValidation)
+		void ServerSetIsActive();
+	bool ServerSetIsActive_Validate();
+	void ServerSetIsActive_Implementation();
+
 };

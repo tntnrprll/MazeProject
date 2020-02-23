@@ -40,7 +40,7 @@ void ABaseGameMode::PostLogin(APlayerController* NewPlayer)
 		{
 
 			FActorSpawnParameters SpawnParameter;
-			ATeam1Character* Player = GetWorld()->SpawnActor<ATeam1Character>(Player1, NewPlayer->GetPawn()->GetActorLocation() + FVector(0.0f, 0.0f, 500.0f), NewPlayer->GetPawn()->GetActorRotation(), SpawnParameter);
+			ATeam1Character* Player = GetWorld()->SpawnActor<ATeam1Character>(Player1, NewPlayer->GetPawn()->GetActorLocation() + FVector(300.0f, 0.0f, 0.0f), NewPlayer->GetPawn()->GetActorRotation(), SpawnParameter);
 			Player->ServerSetMovementMode();
 			Player->GetCharacterMovement()->GravityScale = 0.0f;
 
@@ -53,7 +53,7 @@ void ABaseGameMode::PostLogin(APlayerController* NewPlayer)
 		{
 
 			FActorSpawnParameters SpawnParameter;
-			ATeam2Character* Player = GetWorld()->SpawnActor<ATeam2Character>(Player2, NewPlayer->GetPawn()->GetActorLocation(), NewPlayer->GetPawn()->GetActorRotation(), SpawnParameter);
+			ATeam2Character* Player = GetWorld()->SpawnActor<ATeam2Character>(Player2, NewPlayer->GetPawn()->GetActorLocation() + FVector(300.0f, 0.0f, 0.0f), NewPlayer->GetPawn()->GetActorRotation(), SpawnParameter);
 			Player->ServerSetMovementMode();
 			Player->GetCharacterMovement()->GravityScale = 0.0f;
 
@@ -65,7 +65,7 @@ void ABaseGameMode::PostLogin(APlayerController* NewPlayer)
 		{
 
 			FActorSpawnParameters SpawnParameter;
-			ATeam3Character* Player = GetWorld()->SpawnActor<ATeam3Character>(Player3, NewPlayer->GetPawn()->GetActorLocation(), NewPlayer->GetPawn()->GetActorRotation(), SpawnParameter);
+			ATeam3Character* Player = GetWorld()->SpawnActor<ATeam3Character>(Player3, NewPlayer->GetPawn()->GetActorLocation() + FVector(300.0f, 0.0f, 0.0f), NewPlayer->GetPawn()->GetActorRotation(), SpawnParameter);
 			Player->ServerSetMovementMode();
 			Player->GetCharacterMovement()->GravityScale = 0.0f;
 
@@ -77,7 +77,7 @@ void ABaseGameMode::PostLogin(APlayerController* NewPlayer)
 		{
 
 			FActorSpawnParameters SpawnParameter;
-			ATeam4Character* Player = GetWorld()->SpawnActor<ATeam4Character>(Player4, NewPlayer->GetPawn()->GetActorLocation(), NewPlayer->GetPawn()->GetActorRotation(), SpawnParameter);
+			ATeam4Character* Player = GetWorld()->SpawnActor<ATeam4Character>(Player4, NewPlayer->GetPawn()->GetActorLocation() + FVector(300.0f, 0.0f, 0.0f), NewPlayer->GetPawn()->GetActorRotation(), SpawnParameter);
 			Player->ServerSetMovementMode();
 			Player->GetCharacterMovement()->GravityScale = 0.0f;
 
